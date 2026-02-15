@@ -6,11 +6,13 @@ const toolSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
+        index: true,
     },
 
     toolName:{
         type:String,
-        required: true
+        required: true,
+        index: true,
     },
 
     description:{
@@ -21,6 +23,7 @@ const toolSchema = new mongoose.Schema({
     location:{
         type:String,
         required: true,
+        index: true,
     },
 
     images:{
@@ -32,11 +35,13 @@ const toolSchema = new mongoose.Schema({
     pricePerHour:{
         type: Number,
         required: true,
+        index: true,
     },
 
     isAvailable:{
         type: Boolean,
         default: true,
+        index: true,
     },
 
     renter:{

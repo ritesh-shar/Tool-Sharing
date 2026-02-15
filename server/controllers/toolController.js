@@ -1,3 +1,4 @@
+const { create } = require('../models/rental.js');
 const tool = require('../models/tool.js');
 
 const addTool = async(req,res)=>{
@@ -29,8 +30,33 @@ const addTool = async(req,res)=>{
 
 const getAllTools = async(req,res)=>{
     try{
-        const allTools = await tool.find({}).populate('owner','name');
-        return res.status(200).json({allTools});
+        const filter = {};
+        if(req.query.location){
+            filter.location = req.query.location;
+        }
+        if(req.query.toolName){
+            filter.toolName = {$regex: req.query.toolName, $options: 'i'};
+        }
+        if(req.query.isAvailable){
+            filter.isAvailable = req.query.isAvailable === 'true';
+        }
+        if(req.query.owner){
+            filter.owner = req.query.owner;
+        }
+        if(req.query.minPrice || req.query.maxPrice){
+            filter.pricePerHour = {};
+            filter.pricePerHour.$gte = req.query.minPrice ? parseFloat(req.query.minPrice) : 0;
+            filter.pricePerHour.$lte = req.query.maxPrice ? parseFloat(req.query.maxPrice) : Number.MAX_SAFE_INTEGER;
+        }
+        const page = Math.max(1,parseInt(req.query.page) || 1);
+        const limit = Math.max(1,parseInt(req.query.limit) || 10);
+        const skip = (page-1)*limit;
+        const [total, allTools] = await Promise.all([
+            tool.countDocuments(filter),
+            tool.find(filter).populate('owner','name').skip(skip).limit(limit).sort({createdAt: -1})
+        ]);
+        const totalpages = Math.max(1,Math.ceil(total/limit));
+        return res.status(200).json({allTools,total,totalpages});
     }
 
     catch(error){
