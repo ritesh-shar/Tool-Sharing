@@ -1,30 +1,39 @@
 const rental = require('../models/rental.js');
 const tool = require('../models/tool.js');
+const asyncHandler = require('../utility/asyncHandler.js');
+const mongoose = require('mongoose');
 
-const startRental = async (req,res) => {
-    const session = await rental.startSession();
+const startRental = asyncHandler(async (req,res) => {
+    const session = await mongoose.startSession();
     session.startTransaction();
     try{
     const toolId = req.params.id;
     const renterId = req.user.id;
     
-    const toolToRent = await tool.findById(toolId).session(session);
+    const toolToRent = await tool.findOneAndUpdate({
+        _id: toolId,
+        isAvailable: true,
+        owner: {$ne: renterId},},
+        {isAvailable: false, renter: renterId},
+        {new: true,session: session});
 
     if(!toolToRent){
-        throw {status: 404 ,message:"Tool not found"};
+        const existingTool = await tool.findById(toolId).session(session);
+        if(!existingTool){
+        const error = new Error("Tool not found");
+        error.statusCode = 404;
+        throw error;
     }
-    if(toolToRent.owner.toString() === renterId){
-        throw {status : 403 , message:"Cannot rent what you own"};
+    if(existingTool.owner.toString() === renterId){
+        const error = new Error("Cannot rent what you own");
+        error.statusCode = 403;
+        throw error;
     }
 
-    if(!toolToRent.isAvailable){
-        throw {status: 400, message:"Tool already in use"};
-    }
-
-    toolToRent.isAvailable = false;
-    toolToRent.renter =  renterId;
-    await toolToRent.save({session: session});
-
+        const error = new Error("Tool is not available for rent");
+        error.statusCode = 400;
+        throw error;
+}
     const newRental = await rental.create([{
         renter: renterId,
         owner: toolToRent.owner,
@@ -41,41 +50,46 @@ const startRental = async (req,res) => {
         toolId: toolToRent._id,
         starttime: newRental[0].rentTimeStart,
     })
-
     }
-
     catch(error){
         await session.abortTransaction();
-        return res.status(error.status || 500).json({message:"Error:",error:error.message});
+        throw error;
     }
-
     finally{
         await session.endSession();
     }
 
-}
+})
 
-const endRental = async (req,res) =>{
-    const session = await rental.startSession();
+const endRental = asyncHandler(async (req,res) =>{
+    const session = await mongoose.startSession();
     session.startTransaction();
 
     try{
         const rentalid = req.params.id;
         const myRental = await rental.findById(rentalid).session(session);
         if(!myRental){
-            throw {status: 404, message:"Rental not found"};
+            const error = new Error("Rental not found");
+            error.statusCode = 404;
+            throw error;
         }
         if(myRental.status != 'Active'){
-            throw {status: 400, message:"Tool not in use"};
+            const error = new Error("Tool not in use");
+            error.statusCode = 400;
+            throw error;
         }
         if(myRental.renter.toString() != req.user.id){
-            throw {status: 403, message:"Not authorised to end the rental"};
+            const error = new Error("Not authorised to end the rental");
+            error.statusCode = 403;
+            throw error;
         }
 
         const findTool = myRental.tool;
         const myTool = await tool.findById(findTool).session(session);
         if(!myTool || !myTool.renter || myTool.renter.toString() != req.user.id){
-            throw {status: 400, message:"Not renting tool"};
+            const error = new Error("Not renting tool");
+            error.statusCode = 400;
+            throw error;
         }
 
         myRental.status = 'Completed';
@@ -101,13 +115,35 @@ const endRental = async (req,res) =>{
     }
     catch(error){
         await session.abortTransaction();
-        return res.status(error.status || 500).json({message:"Error:",error:error.message});
+        throw error;
     }
 
     finally{
         await session.endSession();
     }
 
-}
+})
 
-module.exports = {startRental,endRental};
+const getMyRentals = asyncHandler(async (req,res) => {
+    const filter = {renter: req.user.id};
+    if(req.query.status){
+        filter.status = req.query.status;
+    }
+    const page = Math.max(1,parseInt(req.query.page) || 1);
+    const limit = Math.max(1,parseInt(req.query.limit) || 10);
+    const skip = (page-1)*limit;
+    const [total, myRentals] = await Promise.all([
+        rental.countDocuments(filter),
+        rental.find(filter).populate('tool','toolName pricePerHour').populate('owner','name').skip(skip).limit(limit).sort({createdAt: -1})
+    ]);
+        const totalPages = Math.max(1,Math.ceil(total/limit));
+        res.status(200).json({
+            success: true,
+            total,
+            totalPages,
+            currentPage: page,
+            rentals: myRentals
+        })
+});
+
+module.exports = {startRental,endRental,getMyRentals};

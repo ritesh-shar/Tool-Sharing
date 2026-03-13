@@ -26,10 +26,10 @@ const toolSchema = new mongoose.Schema({
         index: true,
     },
 
-    images:{
+    images:[{
         type: String,
         required: true,
-    },
+    }],
 
 
     pricePerHour:{
@@ -44,6 +44,11 @@ const toolSchema = new mongoose.Schema({
         index: true,
     },
 
+    isDeleted:{
+        type: Boolean,
+        default: false,
+    },
+    
     renter:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

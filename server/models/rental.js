@@ -54,4 +54,9 @@ const rentalSchema = new mongoose.Schema({
 
 )
 
+rentalSchema.index({renter: 1});
+rentalSchema.index({tool: 1});
+rentalSchema.index({status: 1});
+rentalSchema.index({renter:1, status:1});
+
 module.exports = mongoose.model('Rental',rentalSchema);

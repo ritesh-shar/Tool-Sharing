@@ -1,8 +1,9 @@
 const User = require('../models/user.js');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const asyncHandler = require('../utility/asyncHandler.js');
 
-const protect = async (req,res,next) => {
+const protect = asyncHandler(async (req,res,next) => {
     let token;
 
     if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")){
@@ -14,14 +15,18 @@ const protect = async (req,res,next) => {
     }
     catch(error){
         console.error('Authorization failed',error.message);
-        return res.status(401).json({message:"Authorization failed"});
+        const err = new Error("Not authorized, token failed");
+        err.statusCode = 401;
+        throw err;
     }
 }
     if(!token){
-        return res.status(401).json({message:"Authorization failed"});
+        const error = new Error("No token provided");
+        error.statusCode = 401;
+        throw error;
     }
 
-}
+})
 
 module.exports = protect;
 
