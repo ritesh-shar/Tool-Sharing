@@ -6,7 +6,17 @@ Live Demo:
 - Backend: https://tool-sharing.onrender.com
 
 Screenshots:
-    - Landing Page:
+Landing Page
+![Landing Page](screenshots/landing.png)
+
+Browse Tools
+![Browse Tools](screenshots/browse-tools.png)
+
+Add Tool
+![Add Tool](screenshots/add-tool.png)
+
+My Rentals
+![My Rentals](screenshots/rentals.png)
     
 
 Docs:
