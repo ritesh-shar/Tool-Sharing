@@ -7,16 +7,16 @@ Live Demo:
 
 Screenshots:
 Landing Page
-![Landing Page](screenshots/landing.png)
+![Landing Page](screenshots/LandingPage.png)
 
 Browse Tools
-![Browse Tools](screenshots/browse-tools.png)
+![Browse Tools](screenshots/BrowseTools.png)
 
 Add Tool
-![Add Tool](screenshots/add-tool.png)
+![Add Tool](screenshots/AddTool.png)
 
 My Rentals
-![My Rentals](screenshots/rentals.png)
+![My Rentals](screenshots/Rentals.png)
     
 
 Docs:
