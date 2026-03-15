@@ -21,7 +21,7 @@ function LoginUser(){
         try{
             const response = await api.post("/users/login", userData);
             login(response.data);
-            router.push("/Tools");
+            router.push("/tools");
         }
         catch(error){
             setError(error.response?.data?.message || "Login failed. Please try again.");

@@ -21,8 +21,8 @@ function AddTool(){
         const toolData = {toolName,description,location,images : [images] ,pricePerHour: parseFloat(pricePerHour)};
 
         try{
-            await api.post("/Tools", toolData);
-            router.push("/Tools");
+            await api.post("/tools", toolData);
+            router.push("/tools");
         }
 
         catch(error){

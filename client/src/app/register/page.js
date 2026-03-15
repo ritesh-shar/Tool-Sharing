@@ -20,7 +20,7 @@ function RegisterUser(){
       try{
         const response = await api.post("/users/register", userData);
         login(response.data);
-          router.push("/Tools");
+          router.push("/tools");
         }
       catch(error){
         setError(error.response?.data?.message || "Registration failed. Please try again.");
