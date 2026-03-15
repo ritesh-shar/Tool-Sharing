@@ -2,7 +2,7 @@ const User = require('../models/user.js');
 const generateToken = require('../utility/generateToken.js');
 const bcrypt = require('bcryptjs');
 const asyncHandler = require('../utility/asyncHandler.js');
-const {registerZodSchema, loginZodSchema} = require('../ValidationSchemas/userValidator.js');
+const {registerZodSchema, loginZodSchema} = require('../validationSchemas/userValidator.js');
 
 const registerUser = asyncHandler(async (req,res) => {
     const data = registerZodSchema.parse(req.body);
