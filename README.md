@@ -17,7 +17,43 @@ Add Tool
 
 My Rentals
 ![My Rentals](screenshots/Rentals.png)
+
+Features:
+- User authentication using JWT
+- Tool listing marketplace
+- Rental lifecycle management
+- Pagination and filtering for browsing tools
+- Persistent login
+- Dark mode UI
+- Protected routes
+- Concurrency-safe rental system
+  
+
+Tech Stack:
+1) Frontend
+    - Next.js
+    - React
+    - Tailwind CSS
+    - Axios
+      
+2)Backend
+    - Node.js
+    - Express.js
+    - MongoDB
+    - Mongoose
     
+ 3)Security
+    - JWT authentication
+    - Helmet
+    - Zod validation
+
+Architecture:
+
+1) Next.js Frontend
+        ↓
+2) Express REST API
+        ↓
+3) MongoDB Database
 
 Docs:
 - [Backend README](./server/README.md)
