@@ -36,13 +36,13 @@ Tech Stack:
     - Tailwind CSS
     - Axios
       
-2)Backend
+2) Backend
     - Node.js
     - Express.js
     - MongoDB
     - Mongoose
     
- 3)Security
+ 3) Security
     - JWT authentication
     - Helmet
     - Zod validation
