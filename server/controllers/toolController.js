@@ -1,6 +1,6 @@
 const tool = require('../models/tool.js');
 const asyncHandler = require('../utility/asyncHandler.js');
-const {toolZodSchema} = require('../validationSchemas/toolValidation.js');
+const {toolZodSchema} = require('../validationSchemas/toolValidator.js');
 
 const addTool = asyncHandler(async(req,res)=>{
             const data = toolZodSchema.parse(req.body);        
