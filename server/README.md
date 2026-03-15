@@ -54,4 +54,5 @@ To run locally:
 
  5) Server runs on http://localhost:PORT
 
-
+FRONTEND:
+Backend code is in the /server folder of the same repository.
