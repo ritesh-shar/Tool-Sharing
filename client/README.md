@@ -1,32 +1,31 @@
-Tool Rental Platform
+## Tool Rental Platform
 
 This is a peer-to-peer (P2P) website which allows you to rent or display tools instead of buying them, thus paying only for the number of hours you use the tool instead of buying a tool you will rarely use.
 
-Tech-Stack:
+## Tech-Stack:
 
 1) Next.js 15 (App Router).
 2) Tailwind CSS to design pages.
 3) Axios to connect frontend and backend.
 4) Context API for auth and theme.
 
-Pages:
+## Pages:
 
-1) / — Landing page
+### 1) / — Landing page
 
-2) /tools — Browse and rent tools.
+### 2) /tools — Browse and rent tools.
 
-3) /register — Create an account.
+### 3) /register — Create an account.
 
-4) /login - Login to your account.
+### 4) /login - Login to your account.
 
-5) /addTool — List a tool (protected)
+### 5) /addTool — List a tool (protected)
 
-6) /myTools — Manage your tools (protected)
+### 6) /myTools — Manage your tools (protected)
 
-7) /myRentals — View rental history (protected)
+### 7) /myRentals — View rental history (protected)
 
-
-Features:
+## Features:
 
 1) JWT authentication with persistent login
 
@@ -36,7 +35,7 @@ Features:
 
 4)  Protected routes with redirect
 
-Running Locally:
+## Running Locally:
 
 To run locally:
 
