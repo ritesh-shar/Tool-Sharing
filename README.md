@@ -48,13 +48,13 @@ A peer-to-peer tool rental platform where users can list their tools for rent or
     - Zod validation
 
 ## Architecture:
-
-## 1) Next.js Frontend
+```
+Next.js Frontend
         ↓
-## 2) Express REST API
+Express REST API
         ↓
-## 3) MongoDB Database
-
+MongoDB Database
+```
 Docs:
 - [Backend README](./server/README.md)
 - [Frontend README](./client/README.md)
