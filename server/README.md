@@ -4,7 +4,7 @@ The backend REST API for Tool Sharing, a peer-to-peer tool rental platform. It h
 
 The backend is designed to maintain data consistency during concurrent rental requests, while preserving rental history when tools are deleted.
 
-## Tech-Stack:
+## Tech Stack:
 
 |# |Layer |Technology |
 |- |----- |---------- |
@@ -43,9 +43,11 @@ Express REST API
 - Concurrency-Safe Rental Acquisition
 A rental request uses a conditional findOneAndUpdate that checks whether a tool is available and updates its availability as a single database operation.
 
+```
 Request A ──┐
             ├──► Atomic availability check + update
 Request B ──┘
+```
 
 Only one request can successfully acquire the available tool.
 
@@ -66,24 +68,24 @@ Tools use soft deletion rather than being physically removed from the database. 
 ### Users:
 |# |Method | Endpoint |	Authentication |	Description |
 |-|------ | ------- | ------- | ------- |
-|1| POST | '''/api/users/register''' |	Public |	Create an account |
-|2| POST	| '''/api/users/login''' |	Public |	Authenticate a user |
-|3| GET	| '''/api/users/me'''	| Protected |	Get the current user |
+|1| POST | `/api/users/register` |	Public |	Create an account |
+|2| POST	| `/api/users/login` |	Public |	Authenticate a user |
+|3| GET	| `/api/users/me`	| Protected |	Get the current user |
 
 ### Tools:
 |# |Method | Endpoint |	Authentication |	Description |
 |-|------ | ------- | ------- | ------- |
-|1| POST | '''/api/tools''' |	Protected |	List a tool |
-|2| GET	| '''/api/tools''' |	Public |	Browse available tools |
-|3| GET	| '''/api/tools/me'''	| Protected |	Get the user's tools |
-|4| DELETE| '''/api/tools/:id''' | Protected | Soft-delete a tool |
+|1| POST | `/api/tools` |	Protected |	List a tool |
+|2| GET	| `/api/tools` |	Public |	Browse available tools |
+|3| GET	| `/api/tools/me`	| Protected |	Get the user's tools |
+|4| DELETE| `/api/tools/:id` | Protected | Soft-delete a tool |
 
 ### Rentals:
 |# |Method | Endpoint |	Authentication |	Description |
 |-|------ | ------- | ------- | ------- |
-|1| POST | '''/api/rentals/:id/rent''' |	Protected |	Create an account |
-|2| POST	| '''/api/rentals/:id/end''' |	Protected |	Authenticate a user |
-|3| GET	| '''/api/rentals/myrentals'''	| Protected |	Get the current user |
+|1| POST | `/api/rentals/:id/rent` |	Protected |	Create an account |
+|2| POST	| `/api/rentals/:id/end` |	Protected |	Authenticate a user |
+|3| GET	| `/api/rentals/myrentals`	| Protected |	Get the current user |
 
 ## Testing
 
@@ -157,6 +159,8 @@ npm start
 The API will run on:
 
 http://localhost:PORT
+
+
 5. Run tests
 ```bash
 npm test
