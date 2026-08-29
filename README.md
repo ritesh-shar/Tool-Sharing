@@ -47,9 +47,10 @@ The backend includes 37 integration tests covering:
 - Pagination and filtering
 
 Tests are automatically executed through GitHub Actions whenever changes are pushed to main.
-
+```
 Test Suites: 4 passed, 4 total
 Tests:       37 passed, 37 total
+```
 
 ### CI Pipeline
 ```text
