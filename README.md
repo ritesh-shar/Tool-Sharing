@@ -52,14 +52,23 @@ Test Suites: 4 passed, 4 total
 Tests:       37 passed, 37 total
 
 ### CI Pipeline
-
-```mermaid
-flowchart TD
-    A[Push to main] --> B[GitHub Actions]
-    B --> C[Node.js 22]
-    C --> D[npm ci]
-    D --> E[npm test]
-    E --> F[37 / 37 Tests Passed ✓]
+```text
+Push to main
+     │
+     ▼
+GitHub Actions
+     │
+     ▼
+Node.js 22
+     │
+     ▼
+npm ci
+     │
+     ▼
+npm test
+     │
+     ▼
+37 / 37 tests passed ✓
 ``` 
 
 ## Tech Stack:
@@ -77,22 +86,27 @@ flowchart TD
 |9 |Deployment|Vercel, Render|
 
 ## Architecture:
-```mermaid
-flowchart TD
-    A[Next.js Frontend] -->|REST / HTTP| B[Express REST API]
-    B --> C[MongoDB]
-    B --> D[JWT Authentication]
-    B --> E[Zod Validation]
-    B --> F[Helmet Security]
 
-    B --> G[Rental Logic]
-    G --> H[Atomic Updates]
-    G --> I[MongoDB Transactions]
-
-    J[Git Push] --> K[GitHub Actions]
-    K --> L[npm ci]
-    L --> M[Jest Tests]
-    M --> N[37 / 37 Passed]
+```text
+┌─────────────────────┐
+│   Next.js Frontend  │
+│  React + Tailwind   │
+└──────────┬──────────┘
+           │ REST / HTTP
+           ▼
+┌─────────────────────┐
+│    Express API      │
+│                     │
+│ JWT │ Zod │ Helmet  │
+└──────────┬──────────┘
+           │ Mongoose
+           ▼
+┌─────────────────────┐
+│       MongoDB       │
+│                     │
+│ Transactions        │
+│ Atomic Updates      │
+└─────────────────────┘
 ```
 ## Engineering Highlights:
 
