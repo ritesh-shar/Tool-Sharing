@@ -307,6 +307,7 @@ p99:        797.79 ms
 The final stress benchmark tested the API at increasing concurrency levels.
 
 |# |Concurrency |Requests |Success Rate |Throughput |Average |p95 |p99 |
+|-| -------- | ------- | -------- | ------ | ---- | --- | --- |
 |1 |10 |	500 |	100% |	35.24 req/s |	283 ms |	827 ms |	934 ms |
 |2 |25 |	500 |	100% |	38.44 req/s |	649 ms |	975 ms |	1945 ms |
 |3 |50 |	500 |	100% |	40.99 req/s |	1178 ms |	1936 ms |	2074 ms |
