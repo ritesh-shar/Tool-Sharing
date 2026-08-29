@@ -4,31 +4,32 @@ const asyncHandler = require('../utility/asyncHandler.js');
 const mongoose = require('mongoose');
 
 const startRental = asyncHandler(async (req,res) => {
-    const session = await mongoose.startSession();
-    session.startTransaction();
-    try{
     const toolId = req.params.id;
     const renterId = req.user.id;
-    
-    const toolToRent = await tool.findOneAndUpdate({
-        _id: toolId,
-        isAvailable: true,
-        owner: {$ne: renterId},},
-        {isAvailable: false, renter: renterId},
-        {new: true,session: session});
+    const MAX_RETRIES = 3;
+    for(let attempt = 1; attempt <= MAX_RETRIES; attempt++){
+    const session = await mongoose.startSession();
+    try{
+        session.startTransaction();
+        const toolToRent = await tool.findOneAndUpdate({
+            _id: toolId,
+            isAvailable: true,
+            owner: {$ne: renterId},},
+            {isAvailable: false, renter: renterId},
+            {returnDocument: "after", session: session});
 
-    if(!toolToRent){
-        const existingTool = await tool.findById(toolId).session(session);
-        if(!existingTool){
-        const error = new Error("Tool not found");
-        error.statusCode = 404;
-        throw error;
-    }
-    if(existingTool.owner.toString() === renterId){
-        const error = new Error("Cannot rent what you own");
-        error.statusCode = 403;
-        throw error;
-    }
+        if(!toolToRent){
+            const existingTool = await tool.findById(toolId).session(session);
+            if(!existingTool){
+                const error = new Error("Tool not found");
+                error.statusCode = 404;
+                throw error;
+            }
+            if(existingTool.owner.toString() === renterId){
+            const error = new Error("Cannot rent what you own");
+            error.statusCode = 403;
+            throw error;
+        }
 
         const error = new Error("Tool is not available for rent");
         error.statusCode = 400;
@@ -53,13 +54,20 @@ const startRental = asyncHandler(async (req,res) => {
     }
     catch(error){
         await session.abortTransaction();
+        if (
+                (error.hasErrorLabel &&
+                 error.hasErrorLabel("TransientTransactionError")) &&
+                attempt < MAX_RETRIES
+            ) {
+                continue;
+            }
         throw error;
     }
     finally{
         await session.endSession();
     }
-
-})
+}
+});
 
 const endRental = asyncHandler(async (req,res) =>{
     const session = await mongoose.startSession();
@@ -67,6 +75,11 @@ const endRental = asyncHandler(async (req,res) =>{
 
     try{
         const rentalid = req.params.id;
+        if (!mongoose.isValidObjectId(rentalid)) {
+    const error = new Error("Invalid rental ID");
+    error.statusCode = 400;
+    throw error;
+}
         const myRental = await rental.findById(rentalid).session(session);
         if(!myRental){
             const error = new Error("Rental not found");
