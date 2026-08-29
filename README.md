@@ -74,7 +74,7 @@ npm test
 
 ## Tech Stack:
 
-|Sr.No | Layer | Technologies |
+|# | Layer | Technologies |
 |----- | ----- | ------------ |
 |1 |Frontend| Next.js , React , Tailwind CSS ,Axios|
 |2 |Backend | Node.js, Express.js|          
