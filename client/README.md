@@ -1,54 +1,139 @@
 ## Tool Rental Platform
+The frontend application for Tool Sharing, a peer-to-peer tool rental platform where users can list tools, browse available tools, rent tools from other users, and manage their rentals.
 
-This is a peer-to-peer (P2P) website which allows you to rent or display tools instead of buying them, thus paying only for the number of hours you use the tool instead of buying a tool you will rarely use.
+The application provides the user interface for authentication, tool discovery, tool management, and rental management.
 
-## Tech-Stack:
+## Tech Stack:
 
-1) Next.js 15 (App Router).
-2) Tailwind CSS to design pages.
-3) Axios to connect frontend and backend.
-4) Context API for auth and theme.
+|# |Layer |	Technology |
+|1 |Framework |Next.js 15 (App Router) |
+|2 |UI| React |
+|3 |Styling | Tailwind CSS |  
+|4 |API Communication |	Axios |
+|5 |State Management |	Context API |
+|6 |Authentication |	JWT |
+|7 |Theme Management |	Context API + localStorage |
+|8 |Deployment	| Vercel |
 
-## Pages:
+## Pages & Routes:
 
-### 1) / — Landing page
-
-### 2) /tools — Browse and rent tools.
-
-### 3) /register — Create an account.
-
-### 4) /login - Login to your account.
-
-### 5) /addTool — List a tool (protected)
-
-### 6) /myTools — Manage your tools (protected)
-
-### 7) /myRentals — View rental history (protected)
+|# |Route |	Access |	Description |
+|1 |`/`	| Public |	Landing page |
+|2 |`/tools` |	Public |	Browse and rent available tools |
+|3 |`/register` |	Public |	Create an account |
+|4 |`/login` |	Public |	Log in to an existing account |
+|5 |`/addTool` |	Protected |	List a new tool |
+|6 |`/myTools` |	Protected |	Manage the user's tools |
+|7 |`/myRentals` |	Protected | View rental history |
 
 ## Features:
 
-1) JWT authentication with persistent login
+### Authentication
+- JWT-based authentication
+- Persistent login across page refreshes
+- Protected routes
+- Automatic redirection for unauthorized users
 
-2) Dark mode with localStorage persistence
+### Tool Discovery
+- Browse available tools
+- Pagination for tool listings
+- Filtering while browsing tools
+- Tool details and rental actions
 
-3) Pagination and filtering on tool browsing
+### Tool Management
 
-4)  Protected routes with redirect
+Authenticated users can:
+
+- List their own tools
+- View their listed tools
+- Remove their tools
+
+### Rental Management
+
+Users can:
+
+- Rent available tools
+- View active rentals
+- End rentals
+- View rental history
+
+### Theme
+
+The application supports dark mode with the selected theme persisted using `localStorage`.
+
+## Architecture
+```
+┌─────────────────────────┐
+│      Next.js App        │
+│       App Router        │
+└────────────┬────────────┘
+             │
+             ▼
+┌─────────────────────────┐
+│    React Components     │
+│                         │
+│  Pages │ UI │ Context   │
+└────────────┬────────────┘
+             │
+             │ Axios / REST
+             ▼
+┌─────────────────────────┐
+│      Express API        │
+│        /server          │
+└─────────────────────────┘
+```
+
+## Authentication Flow:
+```
+User 
+ │ 
+ ▼ 
+Login / Register 
+ │ 
+ ▼ 
+Backend Authentication 
+ │ 
+ ▼ 
+JWT Token 
+ │ 
+ ▼ 
+Frontend Auth Context 
+ │ 
+ ▼ 
+Protected Routes
+```
 
 ## Running Locally:
 
-To run locally:
+1. Clone the repository
+```bash
+git clone https://github.com/ritesh-shar/Tool-Sharing.git
+cd Tool-Sharing/client
+```
+2. Install dependencies
+```bash
+npm install
+```
 
- 1) Clone repo.
+3. Configure environment variables
 
- 2) Run 'npm install'.
+Create a .env.local file:
+```
+NEXT_PUBLIC_API_BASE_URL=your_backend_url
+BACKEND_PORT=your_backend_port
+```
 
- 3) Create '.env' file with:
-    NEXT_PUBLIC_API_BASE_URL= BACKEND_PORT
+4. Start the development server
+```bash
+npm run dev
+```
+The frontend will run on the development server shown by Next.js, typically:
 
- 4) Run 'npm run dev'
-
- 5) Server runs on http://localhost:FRONTEND_PORT
+http://localhost:3000
 
 BACKEND:
-Backend code is in the /server folder of the same repository.
+The backend API is located in the /server directory.
+
+See the Backend README for API endpoints, database architecture, rental concurrency handling, testing, CI, and backend setup.
+
+[Backend Documentation- API endpoints, database behavior, rental implementation, and local backend setup.](../server/README.md)
