@@ -899,4 +899,52 @@ test("should allow only one user to rent a tool during concurrent rental attempt
     expect(tool.renter.toString())
         .toBe(rentals[0].renter.toString());
 });
+test("should allow only one user to rent a tool among 20 concurrent rental attempts", async () => { 
+    const ownerResponse = await request(app) 
+    .post("/api/users/register") 
+    .send({ 
+        name: "Stress Test Owner", 
+        email: "stress-owner@example.com", 
+        password: "password123" }); 
+        // Create 20 renters 
+        const renterResponses = await Promise.all( 
+            Array.from({ length: 20 }, (_, i) => 
+                request(app) 
+            .post("/api/users/register") .send({ 
+                name: `Stress Renter ${i}`, 
+                email: `stress-renter-${i}@example.com`, 
+                password: "password123" }) ) ); 
+                // Owner creates one tool 
+                const toolResponse = await request(app) 
+                .post("/api/tools") .set("Authorization", `Bearer ${ownerResponse.body.token}`) 
+                .send({ 
+                    toolName: "Stress Test Drill", 
+                    description: "Tool used for concurrent rental stress testing", 
+                    location: "Mysuru", 
+                    images: ["https://example.com/stress-drill.jpg"], 
+                    pricePerHour: 100 }); 
+                    expect(toolResponse.statusCode).toBe(201); 
+                    const toolId = toolResponse.body.addNewTool._id; 
+                    // All 20 users attempt to rent the same tool simultaneously 
+                    const responses = await Promise.all( renterResponses.map(renter => request(app) 
+                    .post(`/api/rentals/${toolId}/rent`) 
+                    .set("Authorization", `Bearer ${renter.body.token}`) ) ); 
+                    // Exactly one request should succeed 
+                    const successful = responses.filter( response => response.statusCode === 201 ); 
+                    const failed = responses.filter( response => response.statusCode === 400 ); 
+                    expect(successful).toHaveLength(1); 
+                    expect(failed).toHaveLength(19); 
+                    // Exactly one rental document should exist 
+                    const rentals = await Rental.find({ tool: toolId }); 
+                    expect(rentals).toHaveLength(1); 
+                    expect(rentals[0].status).toBe("Active"); 
+                    // The tool must be unavailable and assigned to the successful renter 
+                    const tool = await Tool.findById(toolId); 
+                    expect(tool.isAvailable).toBe(false); 
+                    expect(tool.renter).not.toBeNull(); 
+                    expect(tool.renter.toString()).toBe(rentals[0].renter.toString());
+                     // The successful renter must be one of the 20 attempted renters 
+                     const renterIds = renterResponses.map( renter => renter.body.id ); 
+                     expect(renterIds).toContain( rentals[0].renter.toString() ); 
+                    });
 });
