@@ -20,7 +20,7 @@ The backend is designed to maintain data consistency during concurrent rental re
 
 ## Architecture:
   
-'''
+```
 Client
   │
   │ REST / HTTP
@@ -36,7 +36,7 @@ Express REST API
   │
   ▼ 
   MongoDB
-'''
+```
 
 ## Key Engineering Decisions
 
@@ -84,9 +84,6 @@ Tools use soft deletion rather than being physically removed from the database. 
 |1| POST | '''/api/rentals/:id/rent''' |	Protected |	Create an account |
 |2| POST	| '''/api/rentals/:id/end''' |	Protected |	Authenticate a user |
 |3| GET	| '''/api/rentals/myrentals'''	| Protected |	Get the current user |
- 1) To start a rental(protected) - POST /api/rentals/:id/rent
- 2) To end a rental(protected) - POST /api/rentals/:id/end
- 3) To view current rentals(protected) - GET /api/rentals/myrentals
 
 ## Testing
 
@@ -112,7 +109,7 @@ Tests:       37 passed, 37 total
 
 GitHub Actions automatically installs dependencies and runs the complete backend test suite whenever changes are pushed to main.
 
-''' text
+``` text
 Push to main
      │
      ▼
@@ -129,40 +126,42 @@ npm test
      │
      ▼
 37 / 37 tests passed ✓
-'''
+```
 
 ## Running Locally
 1. Clone the repository
-'''bash
+```bash
 git clone https://github.com/ritesh-shar/Tool-Sharing.git
 cd Tool-Sharing/server
-'''
+```
 2. Install dependencies
-'''bash
+```bash
 npm install
-'''
+```
+
 3. Configure environment variables
 
 Create a .env file:
-'''
+```
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 PORT=your_port
 CORS_ORIGIN=your_frontend_origin
-'''
+```
 
 4. Start the backend
-'''bash
+```bash
 npm start
-'''
+```
 
 The API will run on:
 
 http://localhost:PORT
 5. Run tests
-'''bash
+```bash
 npm test
-'''
+```
+
 ## FRONTEND:
 
 Frontend
