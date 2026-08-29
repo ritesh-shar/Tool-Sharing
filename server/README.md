@@ -83,9 +83,9 @@ Tools use soft deletion rather than being physically removed from the database. 
 ### Rentals:
 |# |Method | Endpoint |	Authentication |	Description |
 |-|------ | ------- | ------- | ------- |
-|1| POST | `/api/rentals/:id/rent` |	Protected |	Create an account |
-|2| POST	| `/api/rentals/:id/end` |	Protected |	Authenticate a user |
-|3| GET	| `/api/rentals/myrentals`	| Protected |	Get the current user |
+|1| POST | `/api/rentals/:id/rent` |	Protected |	Start a rental |
+|2| POST	| `/api/rentals/:id/end` |	Protected |	End a rental  |
+|3| GET	| `/api/rentals/myrentals`	| Protected |	View the user's rentals |
 
 ## Testing
 
@@ -102,10 +102,12 @@ Test coverage includes:
 - Pagination and filtering
 - Concurrent rental attempts
 
+```
 Current test result:
 
 Test Suites: 4 passed, 4 total
 Tests:       37 passed, 37 total
+```
 
 ## Continuous Integration
 
