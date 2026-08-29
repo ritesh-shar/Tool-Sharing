@@ -9,6 +9,12 @@ jobs:
     test: 
         runs-on: ubuntu-latest
 
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          PORT: ${{ secrets.PORT }}
+          CORS_ORIGIN: ${{ secrets.CORS_ORIGIN }}
+
         defaults:
           run:
             working-directory: server
