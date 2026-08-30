@@ -99,6 +99,7 @@ server/benchmark/
 1,000 requests:
 
 |# |Metric |Result |
+|--| ------| ------| 
 |1 |Successful	|1,000 |
 |2 |Failed |0 |
 |3 |Throughput	|3,463.67 req/s |
@@ -112,6 +113,7 @@ server/benchmark/
 50 concurrent rental requests against independent tools:
 
 |# |Metric |Result |
+|--| ------| ------| 
 |1 |Requests |50 |
 |2 |Successful	|50 |
 |3 |Failed |0 |
@@ -126,6 +128,7 @@ server/benchmark/
 500 requests per endpoint at concurrency 25:
 
 |# |Endpoint |Throughput |Average |p95 |Success |
+|--| ------| ------| 
 |1 |GET |`/api/tools` |36.06 req/s	|690 ms |991 ms |100% |
 |2 |GET |` /api/rentals/myrentals` |37.71 req/s |646 ms |976 ms |100% |
 |3 |POST |`/api/tools` |56.87 req/s |437 ms |927 ms |100% |
@@ -135,6 +138,7 @@ server/benchmark/
 The database benchmark populated MongoDB with 5,000 tool documents and tested paginated and filtered queries.
 
 |# |Query |Throughput |Average |p95 |
+|--| ------| ------| 
 |1 |Page 1 |37.69 req/s |258 ms |810 ms |
 |2 |Page 100 |33.86 req/s |291 ms |823 ms |
 |3 |Page 500 |33.80 req/s |294 ms |826 ms |
@@ -146,6 +150,7 @@ The database benchmark populated MongoDB with 5,000 tool documents and tested pa
 500 requests were executed at each concurrency level:
 
 |# |Concurrency |Success Rate	|Throughput |Average |p95 |p99 |
+|--| ------| ------| 
 |1 |10 |100% |35.24 req/s |283 ms |827 ms |934 ms |
 |2 |25 |100% |38.44 req/s |649 ms |975 ms |1945 ms |
 |3 |50 |100% |40.99 req/s |1178 ms |1936 ms |2074 ms |
