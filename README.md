@@ -105,8 +105,8 @@ server/benchmark/
 |3 |Throughput	|3,463.67 req/s |
 |4 |Average |13.23 ms |
 |5 |p50	|11.72 ms |
-|6 |p95	17.27 ms |
-|7 |p99	37.39 ms |
+|6 |p95 |	17.27 ms |
+|7 |p99	| 37.39 ms |
 
 ### Rental Concurrency
 
