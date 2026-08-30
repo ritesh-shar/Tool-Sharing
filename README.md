@@ -86,14 +86,14 @@ npm test
 ## Performance Benchmarks
 
 The backend contains dedicated benchmark programs for measuring behavior under load.
-
+```
 server/benchmark/ 
 ├── health.js 
 ├── api.js 
 ├── rental.js 
 ├── db.js 
 └── stress.js
-
+```
 ### Health Endpoint
 
 1,000 requests:
