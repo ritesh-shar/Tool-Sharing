@@ -3,6 +3,17 @@ const tool = require('../models/tool.js');
 const asyncHandler = require('../utility/asyncHandler.js');
 const mongoose = require('mongoose');
 
+const isRetryableTransactionError = (error) => {
+    if (typeof error.hasErrorLabel === "function") {
+        if (error.hasErrorLabel("TransientTransactionError")) {
+            return true;
+        }
+    }
+
+    // MongoDB write conflicts commonly use error code 112.
+    return error.code === 112;
+};
+
 const startRental = asyncHandler(async (req,res) => {
     const toolId = req.params.id;
     const renterId = req.user.id;
@@ -52,20 +63,23 @@ const startRental = asyncHandler(async (req,res) => {
         starttime: newRental[0].rentTimeStart,
     })
     }
-    catch(error){
+    catch (error) {
+    if (session.inTransaction()) {
         await session.abortTransaction();
-        if (
-                (error.hasErrorLabel &&
-                 error.hasErrorLabel("TransientTransactionError")) &&
-                attempt < MAX_RETRIES
-            ) {
-                continue;
-            }
-        throw error;
     }
-    finally{
-        await session.endSession();
+
+    if (
+        isRetryableTransactionError(error) &&
+        attempt < MAX_RETRIES
+    ) {
+        continue;
     }
+
+    throw error;
+}
+finally {
+    await session.endSession();
+}
 }
 });
 
